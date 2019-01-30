@@ -9,5 +9,9 @@ const guidelineBaseHeight = 480;
 const scale = size => width / guidelineBaseWidth * size;
 const verticalScale = size => height / guidelineBaseHeight * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
+const screenDimensions = () => {
+  const measures = Dimensions.get('window');
+  return measures;
+};
 
-export { scale, verticalScale, moderateScale };
+export default screenDimensions;
