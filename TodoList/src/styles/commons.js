@@ -1,13 +1,13 @@
 const CommonStyles = class {
-  static orange = '#703d2c';
+  static brown = '#B26C22';
 
-  static darkOrange = '#D04302';
+  static lightBrown = '#FFB364';
 
-  static darkerBlue = '#2C5F70';
+  static darkerBlue = '#265362';
 
-  static blue = '#347b82';
+  static blue = '#4291ab';
 
-  static lighterBlue = '#4baeb8';
+  static lightBlue = '#6fb1c6';
 
   static darkGray = '#5A4D4C';
 
@@ -17,9 +17,15 @@ const CommonStyles = class {
 
   static white = '#ffffff';
 
+  static black = '#000';
+
   static transparent = 'rgba(52, 52, 52, 0)';
 
-  static borderRadius = 5;
+  static borderRadius = 4;
+
+  static elevation = 2;
+
+  static elevationSmall = 2;
 
   static textInputCommons = () => {
     return (
@@ -31,7 +37,7 @@ const CommonStyles = class {
         borderRadius: CommonStyles.borderRadius,
         borderWidth: 1,
         fontSize: 15,
-        borderColor: CommonStyles.darkOrange,
+        borderColor: CommonStyles.lightBrown,
         color: CommonStyles.white
       });
   };

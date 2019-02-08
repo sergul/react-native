@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated, Easing, PanResponder } from 'react-native';
-import measureComponent from '../utils/Measurer';
-import commonStyles from '../styles/commons';
+import measureComponent from '../../utils/Measurer';
+import commonStyles from '../../styles/commons';
 
 /**
- * <ButtonCommon
+ * <Button
       label="Save"
       width={this._screenWidth * 0.3}
       height={(this._screenWidth * 0.3) * 0.3}
@@ -14,8 +14,8 @@ import commonStyles from '../styles/commons';
  * @param
  */
 
-const ButtonCommon = (props) => {
-  const { width = 120, height = 40, pressOutCallback, bgColor = commonStyles.orange, label = 'Button' } = { ...props };
+const ButtonStandard = (props) => {
+  const { label = 'Button', width = 120, height = 30, pressOutCallback, bgColor = commonStyles.brown, bgColorPressed = commonStyles.lightBrown, backgroundOpacity = 0.4 } = { ...props };
   let _value = 1;
   let _pressOutPos = {};
   let _myRef;
@@ -52,7 +52,7 @@ const ButtonCommon = (props) => {
   const bgColorValue = new Animated.Value(0);
   const bgColorRules = bgColorValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [commonStyles.orange, commonStyles.darkOrange]
+    outputRange: [bgColor, bgColorPressed]
   });
 
   scaleValue.addListener(({ value }) => {
@@ -79,7 +79,9 @@ const ButtonCommon = (props) => {
     if ((_pressOutPos.moveX === 0 && _pressOutPos.moveY === 0)
         || (_pressOutPos.moveX > myPos.x && _pressOutPos.moveY > myPos.y
         && _pressOutPos.moveX < (myPos.x + touchBoxWidth) && _pressOutPos.moveY < (myPos.y + touchBoxHeight))) {
-      pressOutCallback.call();
+      if (pressOutCallback) {
+        pressOutCallback.call();
+      }
     }
   };
 
@@ -126,6 +128,9 @@ const ButtonCommon = (props) => {
     height,
     borderRadius: commonStyles.borderRadius,
     position: 'absolute',
+    borderWidth: 0.5,
+    borderColor: commonStyles.lightGray,
+    opacity: backgroundOpacity
   };
 
   const touchBox = { padding: 10, backgroundColor: commonStyles.transparent };
@@ -134,8 +139,7 @@ const ButtonCommon = (props) => {
     ...styles.container,
     borderRadius: commonStyles.borderRadius,
     width,
-    height,
-    borderColor: commonStyles.darkOrange
+    height
   };
 
   return (
@@ -157,7 +161,7 @@ const ButtonCommon = (props) => {
         >
         </Animated.View>
         <View
-          style={contentContainer}
+          style={{ ...contentContainer }}
         >
           <Text style={{ ...styles.label, color: commonStyles.white }}>{ label }</Text>
         </View>
@@ -171,16 +175,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: '5%',
-    paddingRight: '5%',
     paddingTop: 0,
-    paddingBottom: 2,
-    borderWidth: 1.5
+    paddingBottom: 2
   },
 
   label: {
-    fontSize: 20
+    fontSize: 15
   }
 });
 
-export default ButtonCommon;
+export default ButtonStandard;

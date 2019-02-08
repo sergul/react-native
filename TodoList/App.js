@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, ScrollView, Dimensions } from 'react-native';
-import MainScreen from './src/components/add-todo/MainScreen';
+import { StyleSheet, View, Text, StatusBar, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import MainScreen from './src/components/MainScreen';
 import CommonStyles from './src/styles/commons';
 import LinearGradient from './src/components/reusable/gradient/LinearGradient';
 
 const colorList = [
-  { offset: '0', color: CommonStyles.lighterBlue, opacity: '1' },
-  { offset: '40%', color: CommonStyles.blue, opacity: '1' },
-  { offset: '70%', color: CommonStyles.darkerBlue, opacity: '1' },
+  { offset: '0', color: CommonStyles.lightBlue, opacity: '1' },
+  { offset: '70%', color: CommonStyles.blue, opacity: '1' },
   { offset: '100%', color: CommonStyles.darkerBlue, opacity: '1' }
 ];
 
@@ -18,16 +17,22 @@ export default class App extends Component {
     StatusBar.setBackgroundColor(CommonStyles.darkerBlue);
   }
 
+  onSavePress = () => {
+    Keyboard.dismiss();
+  }
+
   render() {
     return (
-      <View style={{ ...styles.container }}>
-        <LinearGradient colorList={colorList} angle={90} />
-        <ScrollView
-          style={{ ...styles.contentContainer }}
-        >
-          <MainScreen />
-        </ScrollView>
-      </View>
+      <TouchableWithoutFeedback onPress={this.onSavePress} accessible={false}>
+        <View style={{ ...styles.container }} behavior="padding">
+          <LinearGradient colorList={colorList} angle={-90} />
+          <View
+            style={{ ...styles.contentContainer }}
+          >
+            <MainScreen />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

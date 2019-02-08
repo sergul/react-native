@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
-import commonStyles from '../styles/commons';
+import commonStyles from '../../styles/commons';
 
 class TodoInput extends PureComponent {
   constructor(props) {
@@ -8,6 +8,9 @@ class TodoInput extends PureComponent {
     this.state = {
       text: ''
     };
+    if (props.returnText) {
+      props.returnText(this.getText);
+    }
   }
 
   componentDidMount() {
@@ -27,7 +30,6 @@ class TodoInput extends PureComponent {
   }
 
   onKeyboardOpen = () => {
-    //alert('Keyboard Shown');
   }
 
   onKeyboardDismiss = () => {
@@ -42,11 +44,22 @@ class TodoInput extends PureComponent {
         text: value
       };
     });
+    const { changeTextCallback } = { ...this.props };
+    const { text } = { ...this.state };
+    if (changeTextCallback) {
+      changeTextCallback(text);
+    }
+  }
+
+  getText = () => {
+    const { text } = { ...this.state };
+    return text;
   }
 
   render() {
+    console.log('Input Field component render');
     const {
-      fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText
+      fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText, cursorColor
     } = { ...this.props };
 
     const { textInputCommons, white } = { ...commonStyles };
@@ -58,10 +71,11 @@ class TodoInput extends PureComponent {
           placeholder={placeholderText}
           placeholderTextColor={white}
           onChangeText={this.textChangeHandler}
-          underlineColorAndroid="transparent"
           fontFamily={fontFamily}
           autoFocus={isAutoFocused}
           multiline={isMultiLine}
+          selectionColor={cursorColor}
+          underlineColorAndroid="transparent"
         >
           { text }
         </TextInput>
