@@ -54,17 +54,20 @@ const CommonStyles = class {
       });
   };
 
-  static containerStandard = (width = '100%',
+  static containerStandard = (
     flex = 1,
+    width = '100%',
     flexDirection = 'column',
     justifyContent = 'center',
     alignItems = 'center',
     borderWidth = 0,
     borderColor = 'red',
+    borderRadius = 0,
     paddingTop = 0,
     paddingRight = 0,
     paddingBottom = 0,
-    paddingLeft = 0) => {
+    paddingLeft = 0
+  ) => {
     return {
       flex,
       width,
@@ -73,6 +76,7 @@ const CommonStyles = class {
       alignItems,
       borderWidth,
       borderColor,
+      borderRadius,
       paddingTop,
       paddingRight,
       paddingBottom,

@@ -29,6 +29,7 @@ class List extends PureComponent {
     return (
       <View style={CommonStyles.containerStandard()}>
         <FlatList
+          style={{ width: '100%' }}
           data={data}
           renderItem={this._rowRenderer}
           keyExtractor={(item) => {

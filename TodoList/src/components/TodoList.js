@@ -1,36 +1,35 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import List from './reusable/List';
 import CommonStyles from '../styles/commons';
+import TodoListItem from './TodoListItem';
 
 class TodoList extends PureComponent {
   state = {
   };
 
   componentDidUpdate(prevProps) {
-    const { todoList } = { ...this.props };
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { todoList } = { ...props };
     return state;
   }
 
   render() {
     const { todoList } = { ...this.props };
+    const container = CommonStyles.containerStandard();
+    container.paddingTop = 20;
     return (
-      <View style={CommonStyles.containerStandard()}>
+      <View style={container}>
         <List
           data={todoList}
           rowRenderer={({ item }) => {
             return (
-              <View style={CommonStyles.containerStandard()}>
-                <Text>
-                  {item && item.text}
-                </Text>
-                <Button title={item.id} />
-              </View>
+              <TodoListItem
+                id={item.id}
+                text={item.text}
+              />
             );
           }}
         />

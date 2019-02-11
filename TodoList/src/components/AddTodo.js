@@ -24,7 +24,6 @@ class AddTodo extends PureComponent {
 
   render() {
     const todoInputContainer = CommonStyles.containerStandard();
-    todoInputContainer.width = '90%';
     todoInputContainer.flexDirection = 'row';
     todoInputContainer.paddingLeft = 5;
     todoInputContainer.paddingRight = 5;

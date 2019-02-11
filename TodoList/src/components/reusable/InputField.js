@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
 import commonStyles from '../../styles/commons';
 
-let _mySelf;
 class InputField extends PureComponent {
   constructor(props) {
     super(props);
@@ -54,7 +53,9 @@ class InputField extends PureComponent {
 
   enterPressHandler = () => {
     const { enterPressCallback } = { ...this.props };
-    enterPressCallback();
+    if (enterPressCallback) {
+      enterPressCallback();
+    }
   }
 
   getText = () => {
@@ -66,25 +67,15 @@ class InputField extends PureComponent {
     console.log(event);
   }
 
-  onBlur = (event) => {
-    console.log(_mySelf);
-  }
-
   render() {
     const {
-      fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText, cursorColor
+      fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText, cursorColor, text
     } = { ...this.props };
 
     const { textInput, white } = { ...commonStyles };
-    const { text } = { ...this.state };
     return (
       <View style={commonStyles.containerStandard()}>
         <TextInput
-          ref={(target) => {
-            if (target) {
-              _mySelf = target;
-            }
-          }}
           style={{ ...textInput(), ...outerStyles }}
           placeholder={placeholderText}
           placeholderTextColor={white}
