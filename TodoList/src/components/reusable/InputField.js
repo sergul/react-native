@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
 import commonStyles from '../../styles/commons';
 
-class TodoInput extends PureComponent {
+let _mySelf;
+class InputField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,23 +52,40 @@ class TodoInput extends PureComponent {
     }
   }
 
+  enterPressHandler = () => {
+    const { enterPressCallback } = { ...this.props };
+    enterPressCallback();
+  }
+
   getText = () => {
     const { text } = { ...this.state };
     return text;
   }
 
+  clearAndRetainFocus = (event) => {
+    console.log(event);
+  }
+
+  onBlur = (event) => {
+    console.log(_mySelf);
+  }
+
   render() {
-    console.log('Input Field component render');
     const {
       fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText, cursorColor
     } = { ...this.props };
 
-    const { textInputCommons, white } = { ...commonStyles };
+    const { textInput, white } = { ...commonStyles };
     const { text } = { ...this.state };
     return (
-      <View style={styles.container}>
+      <View style={commonStyles.containerStandard()}>
         <TextInput
-          style={{ ...textInputCommons(), ...outerStyles }}
+          ref={(target) => {
+            if (target) {
+              _mySelf = target;
+            }
+          }}
+          style={{ ...textInput(), ...outerStyles }}
           placeholder={placeholderText}
           placeholderTextColor={white}
           onChangeText={this.textChangeHandler}
@@ -76,6 +94,8 @@ class TodoInput extends PureComponent {
           multiline={isMultiLine}
           selectionColor={cursorColor}
           underlineColorAndroid="transparent"
+          onSubmitEditing={this.enterPressHandler}
+          blurOnSubmit={false}
         >
           { text }
         </TextInput>
@@ -84,11 +104,4 @@ class TodoInput extends PureComponent {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-});
-
-export default TodoInput;
+export default InputField;

@@ -27,7 +27,7 @@ const CommonStyles = class {
 
   static elevationSmall = 2;
 
-  static textInputCommons = () => {
+  static textInput = () => {
     return (
       {
         paddingLeft: '3%',
@@ -53,6 +53,32 @@ const CommonStyles = class {
         fontSize: 15
       });
   };
+
+  static containerStandard = (width = '100%',
+    flex = 1,
+    flexDirection = 'column',
+    justifyContent = 'center',
+    alignItems = 'center',
+    borderWidth = 0,
+    borderColor = 'red',
+    paddingTop = 0,
+    paddingRight = 0,
+    paddingBottom = 0,
+    paddingLeft = 0) => {
+    return {
+      flex,
+      width,
+      flexDirection,
+      justifyContent,
+      alignItems,
+      borderWidth,
+      borderColor,
+      paddingTop,
+      paddingRight,
+      paddingBottom,
+      paddingLeft
+    };
+  }
 };
 
 export default CommonStyles;

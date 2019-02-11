@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Animated, Easing, PanResponder } from 'react-native';
 import measureComponent from '../../utils/Measurer';
 import commonStyles from '../../styles/commons';
+import CommonStyles from '../../styles/commons';
 
 /**
  * <Button
@@ -134,9 +135,11 @@ const ButtonStandard = (props) => {
   };
 
   const touchBox = { padding: 10, backgroundColor: commonStyles.transparent };
-
+  const container = CommonStyles.containerStandard();
+  container.flexDirection = 'row';
+  container.flex = 0;
   const contentContainer = {
-    ...styles.container,
+    ...container,
     borderRadius: commonStyles.borderRadius,
     width,
     height
@@ -171,14 +174,6 @@ const ButtonStandard = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 0,
-    paddingBottom: 2
-  },
-
   label: {
     fontSize: 15
   }

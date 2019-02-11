@@ -1,34 +1,35 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import { connect } from 'react-redux';
 import List from './reusable/List';
+import CommonStyles from '../styles/commons';
 
 class TodoList extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
+  state = {
+  };
+
+  componentDidUpdate(prevProps) {
+    const { todoList } = { ...this.props };
   }
 
-  getTodoListData = () => {
-    const list = [...Array(20)].map((d, index) => {
-      return { id: index.toString(), text: d };
-    });
-    return list;
+  static getDerivedStateFromProps(props, state) {
+    const { todoList } = { ...props };
+    return state;
   }
 
   render() {
+    const { todoList } = { ...this.props };
     return (
-      <View style={styles.container}>
+      <View style={CommonStyles.containerStandard()}>
         <List
-          data={this.getTodoListData()}
+          data={todoList}
           rowRenderer={({ item }) => {
             return (
-              <View>
+              <View style={CommonStyles.containerStandard()}>
                 <Text>
                   {item && item.text}
-                  {item && item.id}
                 </Text>
-                <Button title="title 1">Button 1</Button>
+                <Button title={item.id} />
               </View>
             );
           }}
@@ -38,13 +39,14 @@ class TodoList extends PureComponent {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});
+const mapStateToProps = (state) => {
+  return {
+    todoList: state.todo.todoList
+  };
+};
 
-export default TodoList;
+const mapDispatchToProps = () => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

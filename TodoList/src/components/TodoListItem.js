@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const TodoItem = (props) => {
+const TodoListItem = (props) => {
   return (
     <View>
       <Text>Todo List Item</Text>
@@ -9,4 +9,4 @@ const TodoItem = (props) => {
   );
 };
 
-export default TodoItem;
+export default TodoListItem;

@@ -1,22 +1,20 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import TodoInput from './reusable/InputField';
 import CommonStyles from '../styles/commons';
-import ButtonStandard from './reusable/ButtonStandard';
+import TodoActions from '../store/todo/actions';
 
 let getTodoTextCallback;
 
 class AddTodo extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
-  onRememberButtonTouch = () => {
+  onAddTodoSubmit = () => {
     if (getTodoTextCallback) {
       const todoText = getTodoTextCallback();
-      console.log(todoText);
+      if (todoText.trim() !== '') {
+        const { onAddTodo } = { ...this.props };
+        onAddTodo(todoText);
+      }
     }
   }
 
@@ -25,64 +23,48 @@ class AddTodo extends PureComponent {
   }
 
   render() {
-    console.log('Add Todo component render');
+    const todoInputContainer = CommonStyles.containerStandard();
+    todoInputContainer.width = '90%';
+    todoInputContainer.flexDirection = 'row';
+    todoInputContainer.paddingLeft = 5;
+    todoInputContainer.paddingRight = 5;
+    todoInputContainer.flex = 0;
     return (
-      <View style={styles.container}>
-        <View
-          style={{ backgroundColor: `${CommonStyles.lightBlue}`,
-            borderRadius: CommonStyles.borderRadius,
-            shadowRadius: CommonStyles.borderRadius,
-            elevation: CommonStyles.elevation,
-            ...styles.todoInputContainer }}
-        >
-          <TodoInput
-            fontFamily="OpenSans-Regular"
-            outerStyles={{ borderWidth: 0,
-              width: '100%',
-              fontSize: 25,
-              paddingLeft: 0,
-              paddingRight: 0,
-              paddingTop: 5,
-              paddingBottom: 5 }}
-            placeholderText="Type your doable here ..."
-            cursorColor={CommonStyles.brown}
-            returnText={this.getTodoText}
-          />
-        </View>
-        <ButtonStandard
-          label="Remember"
-          bgColor={CommonStyles.blue}
-          bgColorPressed={CommonStyles.darkerBlue}
-          pressOutCallback={this.onRememberButtonTouch}
+      <View
+        style={{ backgroundColor: `${CommonStyles.lightBlue}`,
+          borderRadius: CommonStyles.borderRadius,
+          shadowRadius: CommonStyles.borderRadius,
+          elevation: CommonStyles.elevation,
+          ...todoInputContainer }}
+      >
+        <TodoInput
+          fontFamily="OpenSans-Regular"
+          outerStyles={{ borderWidth: 0,
+            width: '100%',
+            fontSize: 25,
+            paddingLeft: 0,
+            paddingRight: 0,
+            paddingTop: 5,
+            paddingBottom: 5 }}
+          placeholderText="Type your doable ..."
+          cursorColor={CommonStyles.brown}
+          returnText={this.getTodoText}
+          enterPressCallback={this.onAddTodoSubmit}
         />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    width: '100%',
-    flexDirection: 'column',
-    borderWidth: 0,
-    borderColor: 'red',
-  },
+const mapStateToProps = () => {
+  return {};
+};
 
-  todoInputContainer: {
-    width: '90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 5,
-    paddingRight: 5
-  },
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddTodo: todoText => dispatch(TodoActions.add(todoText)),
+    onDeleteTodo: id => dispatch(TodoActions.delete(id))
+  };
+};
 
-  addTodoContainer: {
-    width: '100%',
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  }
-});
-
-export default AddTodo;
+export default connect(mapStateToProps, mapDispatchToProps)(AddTodo);

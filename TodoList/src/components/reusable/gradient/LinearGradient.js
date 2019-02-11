@@ -9,7 +9,6 @@ class LinearGradient extends Component {
   constructor(props) {
     super(props);
     Dimensions.addEventListener('change', (dimensions) => {
-      console.log(dimensions.window);
       this.setState({
         _width: dimensions.window.width,
         _height: dimensions.window.height - (StatusBar.currentHeight || 0)
