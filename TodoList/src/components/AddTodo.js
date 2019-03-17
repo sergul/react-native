@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import TodoInput from './reusable/InputField';
 import CommonStyles from '../styles/commons';
@@ -8,6 +8,9 @@ import TodoActions from '../store/todo/actions';
 let getTodoTextCallback;
 
 class AddTodo extends PureComponent {
+  componentDidMount() {
+  }
+
   onAddTodoSubmit = () => {
     if (getTodoTextCallback) {
       const todoText = getTodoTextCallback();

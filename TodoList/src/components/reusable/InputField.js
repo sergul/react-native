@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, TextInput, StyleSheet, Keyboard } from 'react-native';
+import { View, TextInput, Keyboard } from 'react-native';
 import commonStyles from '../../styles/commons';
 
 class InputField extends PureComponent {
@@ -29,7 +29,7 @@ class InputField extends PureComponent {
     this.keyboardDidHideListener.remove();
   }
 
-  onKeyboardOpen = () => {
+  onKeyboardOpen = ({ endCoordinates: { height } }) => {
   }
 
   onKeyboardDismiss = () => {
@@ -40,6 +40,7 @@ class InputField extends PureComponent {
 
   textChangeHandler = (value) => {
     this.setState(() => {
+      console.log(`text in textChangeHandler = ${value}`);
       return {
         text: value
       };
@@ -58,33 +59,74 @@ class InputField extends PureComponent {
     }
   }
 
-  getText = () => {
-    const { text } = { ...this.state };
-    return text;
+  touchEndHandler = () => {
+    const { touchEndCallback } = { ...this.props };
+    if (touchEndCallback) {
+      touchEndCallback();
+    }
   }
 
-  clearAndRetainFocus = (event) => {
-    console.log(event);
+  touchStartHandler = () => {
+    const { touchStartCallback } = { ...this.props };
+    if (touchStartCallback) {
+      touchStartCallback();
+    }
+  }
+
+  blurHandler = () => {
+    const { blurCallback } = { ...this.props };
+    if (blurCallback) {
+      blurCallback();
+    }
+  }
+
+  focusHandler = () => {
+    const { focusCallback } = { ...this.props };
+    if (focusCallback) {
+      focusCallback();
+    }
+  }
+
+  getText = () => {
+    const { text } = { ...this.state };
+    console.log(`text in getText = ${text}`);
+    return text;
   }
 
   render() {
     const {
-      fontFamily, isAutoFocused = false, isMultiLine = false, outerStyles, placeholderText, cursorColor, text
+      fontFamily, isAutoFocused = false, isEditable = true, isMultiLine = false, isCaretHidden = false, outerStyles, placeholderText, cursorColor, text: textFromProps
     } = { ...this.props };
 
+    const { text: textFromState } = { ...this.state };
+
     const { textInput, white } = { ...commonStyles };
+
+    let text = textFromProps;
+    if (!text) {
+      text = textFromState;
+    }
+
     return (
       <View style={commonStyles.containerStandard()}>
         <TextInput
           style={{ ...textInput(), ...outerStyles }}
+          ref={(ref) => {
+            this._myRef = ref;
+          }}
+          onTouchEnd={this.touchEndHandler}
+          onTouchStart={this.touchStartHandler}
+          onBlur={this.blurHandler}
+          onFocus={this.focusHandler}
           placeholder={placeholderText}
           placeholderTextColor={white}
           onChangeText={this.textChangeHandler}
           fontFamily={fontFamily}
           autoFocus={isAutoFocused}
+          caretHidden={isCaretHidden}
+          editable={isEditable}
           multiline={isMultiLine}
           selectionColor={cursorColor}
-          underlineColorAndroid="transparent"
           onSubmitEditing={this.enterPressHandler}
           blurOnSubmit={false}
         >

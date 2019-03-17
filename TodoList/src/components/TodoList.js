@@ -1,51 +1,47 @@
 import React, { PureComponent } from 'react';
-import { View } from 'react-native';
-import { connect } from 'react-redux';
-import List from './reusable/List';
-import CommonStyles from '../styles/commons';
+import { FlatList, View, Keyboard } from 'react-native';
 import TodoListItem from './TodoListItem';
+import CommonStyles from '../styles/commons';
 
 class TodoList extends PureComponent {
-  state = {
-  };
+  _keyExtractor = item => item.id;
 
-  componentDidUpdate(prevProps) {
+  _renderItem = ({ item }) => {
+    const { selected = new Map(), edited = new Map() } = { ...this.props };
+    const editedText = edited.get(item.id);
+    if (editedText && editedText.trim() !== '') {
+      item.text = editedText.trim();
+    }
+    return (
+      <TodoListItem
+        id={item.id}
+        selected={!!selected.get(item.id)}
+        text={item.text}
+      />
+    );
   }
 
-  static getDerivedStateFromProps(props, state) {
-    return state;
+  _onScrollStart = () => {
+    Keyboard.dismiss();
   }
 
   render() {
-    const { todoList } = { ...this.props };
-    const container = CommonStyles.containerStandard();
-    container.paddingTop = 20;
+    const { data } = { ...this.props };
     return (
-      <View style={container}>
-        <List
-          data={todoList}
-          rowRenderer={({ item }) => {
-            return (
-              <TodoListItem
-                id={item.id}
-                text={item.text}
-              />
-            );
-          }}
+      <View
+        style={CommonStyles.containerStandard()}
+      >
+        <FlatList
+          style={{ width: '100%' }}
+          data={data}
+          keyExtractor={this._keyExtractor}
+          renderItem={this._renderItem}
+          initialNumToRender={300}
+          onScrollBeginDrag={this._onScrollStart}
         />
       </View>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    todoList: state.todo.todoList
-  };
-};
-
-const mapDispatchToProps = () => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default TodoList;

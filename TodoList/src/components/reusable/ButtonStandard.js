@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated, Easing, PanResponder } from 'react-native';
 import measureComponent from '../../utils/Measurer';
-import commonStyles from '../../styles/commons';
 import CommonStyles from '../../styles/commons';
 
 /**
@@ -9,14 +8,14 @@ import CommonStyles from '../../styles/commons';
       label="Save"
       width={this._screenWidth * 0.3}
       height={(this._screenWidth * 0.3) * 0.3}
-      bgColor={commonStyles.orange}
+      bgColor={CommonStyles.orange}
       pressOutCallback={this.onSavePress}
     />
  * @param
  */
 
 const ButtonStandard = (props) => {
-  const { label = 'Button', width = 120, height = 30, pressOutCallback, bgColor = commonStyles.brown, bgColorPressed = commonStyles.lightBrown, backgroundOpacity = 0.4 } = { ...props };
+  const { label = 'Button', width = 120, height = 30, pressOutCallback, bgColor = CommonStyles.brown, bgColorPressed = CommonStyles.lightBrown, backgroundOpacity = 0.4 } = { ...props };
   let _value = 1;
   let _pressOutPos = {};
   let _myRef;
@@ -127,20 +126,20 @@ const ButtonStandard = (props) => {
     backgroundColor: bgColorRules,
     width,
     height,
-    borderRadius: commonStyles.borderRadius,
+    borderRadius: CommonStyles.borderRadius,
     position: 'absolute',
     borderWidth: 0.5,
-    borderColor: commonStyles.lightGray,
+    borderColor: CommonStyles.lightGray,
     opacity: backgroundOpacity
   };
 
-  const touchBox = { padding: 10, backgroundColor: commonStyles.transparent };
+  const touchBox = { padding: 10, backgroundColor: CommonStyles.transparent };
   const container = CommonStyles.containerStandard();
   container.flexDirection = 'row';
   container.flex = 0;
   const contentContainer = {
     ...container,
-    borderRadius: commonStyles.borderRadius,
+    borderRadius: CommonStyles.borderRadius,
     width,
     height
   };
@@ -166,7 +165,7 @@ const ButtonStandard = (props) => {
         <View
           style={{ ...contentContainer }}
         >
-          <Text style={{ ...styles.label, color: commonStyles.white }}>{ label }</Text>
+          <Text style={{ ...styles.label, color: CommonStyles.white }}>{ label }</Text>
         </View>
       </Animated.View>
     </View>

@@ -20,6 +20,7 @@
     "react/prefer-stateless-function": "off",
     "no-plusplus": "off",
     "arrow-body-style": [0, "error"],
+    "no-param-reassign": ["error", { "props": false }],
     "no-use-before-define": "off",
     "react/prop-types": "off",
     "comma-dangle": "off",

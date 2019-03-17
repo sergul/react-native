@@ -3,7 +3,9 @@ export default class TodoItem {
 
   text = '';
 
-  constructor(id, text) {
+  isActive = false;
+
+  constructor(id, text = '') {
     this.id = id;
     this.text = text;
   }

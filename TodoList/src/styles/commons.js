@@ -1,7 +1,7 @@
 const CommonStyles = class {
   static brown = '#B26C22';
 
-  static lightBrown = '#FFB364';
+  static lightBrown = '#dfaf70';
 
   static darkerBlue = '#265362';
 
@@ -13,7 +13,7 @@ const CommonStyles = class {
 
   static middleGray = '#8A8683';
 
-  static lightGray = '#E4EBF2';
+  static lightGray = '#d8f6e9';
 
   static white = '#ffffff';
 
