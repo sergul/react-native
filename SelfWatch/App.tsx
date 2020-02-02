@@ -1,11 +1,11 @@
 import React, {ReactNode} from 'react';
 import {View} from 'react-native';
-import {Timer} from './src/ui/timer/Timer';
+import {StopWatch} from './src/ui/stop-watch/StopWatch';
 
 const App: () => ReactNode = () => {
   return (
     <View>
-      <Timer />
+      <StopWatch />
     </View>
   );
 };
