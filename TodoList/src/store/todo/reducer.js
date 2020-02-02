@@ -13,19 +13,25 @@ const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case TodoActions.ADD: {
       const newList = [];
-      // for (let i = 0; i < 100; ++i) {
-      //   const todoId = `${Date.now().toString()}${Math.random()}`;
-      //   const newTodo = new TodoItem(todoId, action.text);
-      //   newList.push(newTodo);
-      // }
-      const todoId = `${Date.now().toString()}${Math.random()}`;
-      const newTodo = new TodoItem(todoId, action.text);
-      newList.push(newTodo);
+      for (let i = 0; i < 30; ++i) {
+        const todoId = `${Date.now().toString()}${Math.random()}`;
+        const newTodo = new TodoItem(todoId, `${action.text}-${(i + 1)}`);
+        newList.push(newTodo);
+      }
+      // const todoId = `${Date.now().toString()}${Math.random()}`;
+      // const newTodo = new TodoItem(todoId, action.text);
+      // newList.push(newTodo);
       const prevList = state.todoList;
 
       return {
         ...state,
         todoList: [...newList, ...prevList]
+      };
+    }
+    case TodoActions.SAVE_SELECTED_ROW_Y_POS: {
+      return {
+        ...state,
+        selectedRowYPos: action.yPos
       };
     }
     case TodoActions.DELETE: {
@@ -37,16 +43,16 @@ const todoReducer = (state = initialState, action) => {
       };
     }
     case TodoActions.EDIT_TEXT: {
-      const editedItem = new Map();
-      editedItem.set(action.id, action.text);
+      const editedItem = {};
+      editedItem[action.id] = action.text;
       return {
         ...state,
         edited: editedItem
       };
     }
-    case TodoActions.SET_SELECTED: {
-      const selected = new Map();
-      selected.set(action.id, true);
+    case TodoActions.SELECT_ROW: {
+      const selected = {};
+      selected[action.id] = action.isSelected;
       return {
         ...state,
         selected

@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Keyboard, TouchableOpacity } from 'react-native';
+import { View, Keyboard, TouchableOpacity, Dimensions, UIManager, findNodeHandle } from 'react-native';
 import { connect } from 'react-redux';
 import CommonStyles from '../styles/commons';
 import InputField from './reusable/InputField';
 import TodoActions from '../store/todo/actions';
 import getStore from '../store/configureStore';
+
+const { width, height } = Dimensions.get('window');
 
 class TodoListItem extends PureComponent {
   constructor(props) {
@@ -19,47 +21,69 @@ class TodoListItem extends PureComponent {
   }
 
   onTextInputFocus = () => {
-    const { id, onRowPress } = { ...this.props };
-    onRowPress(id);
+    const { id, onRowFocusIn, selectedRowYPos } = { ...this.props };
+    const parentContentOffset = this._parentOffsetGetter ? this._parentOffsetGetter() : 0;
+    console.log(parentContentOffset);
+    this._view.measure((x, y, widthT, heightT, pageX, pageY) => {
+      selectedRowYPos(pageY);
+      onRowFocusIn(id, true);
+    });
   };
 
   onTextInputBlur = () => {
-    console.log('on text input blur');
+    const { id, onRowFocusOut } = { ...this.props };
+    onRowFocusOut(id, false);
+    this.applyEditedText();
   };
 
   onTextInputTouchStart = () => {
   }
 
   onSubmit = () => {
+    this.applyEditedText();
+    Keyboard.dismiss();
+    this.isSubmitted = true;
+  };
+
+  applyEditedText = () => {
     const { onEditTodoText, id } = { ...this.props };
     if (this.getTodoTextCallback) {
       const text = this.getTodoTextCallback().trim();
       onEditTodoText({ id, text });
     }
-    Keyboard.dismiss();
-  };
+  }
 
   getTodoText = (callback) => {
     this.getTodoTextCallback = callback;
   }
 
+  getTextInputRef = (callback) => {
+    this.textInputRefCallback = callback;
+  }
+
   _onPress = () => {
-    const { id, onRowPress } = { ...this.props };
-    onRowPress(id);
+    const { id, onRowFocusIn } = { ...this.props };
+    onRowFocusIn(id, true);
   }
 
   render() {
-    const { text, id, selected } = { ...this.props };
+    const { text, id, isSelected, getParentContentVerticalOffset } = { ...this.props };
+    this._parentOffsetGetter = getParentContentVerticalOffset;
     const container = CommonStyles.containerStandard();
-    container.borderBottomWidth = selected ? 1 : 0.5;
-    container.height = 80;
-    container.borderColor = selected ? CommonStyles.lightBrown : CommonStyles.lightGray;
+    container.borderBottomWidth = isSelected ? 1 : 0.5;
+    container.paddingBottom = isSelected ? 200 : 80;
+    container.borderColor = isSelected ? CommonStyles.lightBrown : CommonStyles.lightGray;
     return (
       <TouchableOpacity
         onPress={this._onPress}
       >
         <View
           style={{ ...container }}
+          ref={(ref) => {
+            if (ref) {
+              this._view = ref;
+            }
+          }}
         >
           <InputField
             fontFamily="OpenSans-Regular"
@@ -75,7 +99,9 @@ class TodoListItem extends PureComponent {
             enterPressCallback={this.onSubmit}
             placeholderText="Type your doable ..."
             cursorColor={CommonStyles.brown}
-            returnText={this.getTodoText}
+            needsFocus={isSelected && !this.isSubmitted}
+            returnTextCallback={this.getTodoText}
+            textInputRefCallback={this.getTextInputRef}
             text={text}
           />
         </View>
@@ -86,14 +112,15 @@ class TodoListItem extends PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    activeTodoIndex: state.todo.activeTodoIndex
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onEditTodoText: id => dispatch(TodoActions.editText(id)),
-    onRowPress: id => dispatch(TodoActions.setSelected(id))
+    onRowFocusIn: (id, isSelected) => dispatch(TodoActions.selectRow(id, isSelected)),
+    onRowFocusOut: (id, isSelected) => dispatch(TodoActions.selectRow(id, isSelected)),
+    selectedRowYPos: yPos => dispatch(TodoActions.saveSelectedRowYPos(yPos))
   };
 };
 

@@ -8,8 +8,12 @@ class InputField extends PureComponent {
     this.state = {
       text: ''
     };
-    if (props.returnText) {
-      props.returnText(this.getText);
+    if (props.returnTextCallback) {
+      props.returnTextCallback(this.getText);
+    }
+
+    if (props.textInputRefCallback) {
+      props.textInputRefCallback(this.getRef);
     }
   }
 
@@ -89,8 +93,18 @@ class InputField extends PureComponent {
 
   getText = () => {
     const { text } = { ...this.state };
-    console.log(`text in getText = ${text}`);
     return text;
+  }
+
+  getRef = () => {
+    return this._myRef;
+  }
+
+  componentDidUpdate = () => {
+    const { needsFocus } = { ...this.props };
+    if (needsFocus && this._myRef && !this._myRef.isFocused()) {
+      this._myRef.focus();
+    }
   }
 
   render() {
@@ -112,7 +126,9 @@ class InputField extends PureComponent {
         <TextInput
           style={{ ...textInput(), ...outerStyles }}
           ref={(ref) => {
-            this._myRef = ref;
+            if (ref) {
+              this._myRef = ref;
+            }
           }}
           onTouchEnd={this.touchEndHandler}
           onTouchStart={this.touchStartHandler}

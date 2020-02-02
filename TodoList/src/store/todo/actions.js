@@ -5,7 +5,11 @@ export default class TodoActions {
 
   static EDIT_TEXT = 'EDIT_TEXT';
 
-  static SET_SELECTED = 'SET_ACTIVE';
+  static SELECT_ROW = 'SELECT_ROW';
+
+  static SAVE_SELECTED_ROW_Y_POS = 'SAVE_SELECTED_ROW_Y_POS';
+
+  static DESELECT_ROW = 'DESELECT_ROW';
 
   static SET_SCROLLING_STATE = 'SET_SCROLLING_STATE';
 
@@ -31,9 +35,24 @@ export default class TodoActions {
     };
   };
 
-  static setSelected = (id) => {
+  static selectRow = (id, isSelected) => {
     return {
-      type: TodoActions.SET_SELECTED,
+      type: TodoActions.SELECT_ROW,
+      id,
+      isSelected
+    };
+  };
+
+  static saveSelectedRowYPos = (yPos) => {
+    return {
+      type: TodoActions.SAVE_SELECTED_ROW_Y_POS,
+      yPos
+    };
+  };
+
+  static deselectRow = (id) => {
+    return {
+      type: TodoActions.DESELECT_ROW,
       id
     };
   };

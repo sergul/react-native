@@ -66,7 +66,8 @@ const CommonStyles = class {
     paddingTop = 0,
     paddingRight = 0,
     paddingBottom = 0,
-    paddingLeft = 0
+    paddingLeft = 0,
+    position = 'relative',
   ) => {
     return {
       flex,
@@ -80,7 +81,8 @@ const CommonStyles = class {
       paddingTop,
       paddingRight,
       paddingBottom,
-      paddingLeft
+      paddingLeft,
+      position
     };
   }
 };

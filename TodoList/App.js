@@ -1,5 +1,10 @@
-import React, { Component } from 'react';
-import { StatusBar, View } from 'react-native';
+import React, {
+  Component
+} from 'react';
+import {
+  StatusBar,
+  View
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MainScreen from './src/components/MainScreen';
 import CommonStyles from './src/styles/commons';
@@ -13,19 +18,27 @@ class App extends Component {
   }
 
   render() {
+    const lll = global.HermesInternal;
     const container = CommonStyles.containerStandard();
-    return (
-      <View
-        style={container}
-      >
-        <LinearGradient
-          locations={[0, 0.5, 1]}
-          colors={[CommonStyles.lightBlue, CommonStyles.blue, CommonStyles.darkerBlue]}
-          style={container}
-        >
-          <MainScreen />
-        </LinearGradient>
-      </View>
+    return ( <
+      View style = {
+        container
+      } >
+      <
+      LinearGradient locations = {
+        [0, 0.5, 1]
+      }
+      colors = {
+        [CommonStyles.lightBlue, CommonStyles.blue, CommonStyles.darkerBlue]
+      }
+      style = {
+        container
+      } >
+      <
+      MainScreen / >
+      <
+      /LinearGradient> <
+      /View>
     );
   }
 }

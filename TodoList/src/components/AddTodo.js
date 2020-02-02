@@ -50,7 +50,7 @@ class AddTodo extends PureComponent {
             paddingBottom: 5 }}
           placeholderText="Type your doable ..."
           cursorColor={CommonStyles.brown}
-          returnText={this.getTodoText}
+          returnTextCallback={this.getTodoText}
           enterPressCallback={this.onAddTodoSubmit}
         />
       </View>
