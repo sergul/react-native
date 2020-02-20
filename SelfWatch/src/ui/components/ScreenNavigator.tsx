@@ -1,12 +1,21 @@
 import * as React from 'react';
 import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
-import {TabView, SceneMap} from 'react-native-tab-view';
+import {
+  TabView,
+  SceneMap,
+  SceneRendererProps,
+  NavigationState,
+} from 'react-native-tab-view';
 import {useState} from 'react';
 import Animated from 'react-native-reanimated';
 import {Route} from 'react-native-tab-view';
 import {StopWatch} from './stop-watch/StopWatch';
 import {Timer} from './timer/Timer';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+type TabBarProps = SceneRendererProps & {
+  navigationState: NavigationState<Route>;
+};
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -25,7 +34,8 @@ export const ScreenNavigator = () => {
     timer: () => <Timer />,
   });
 
-  const renderTabBar = (props: any) => {
+  const renderTabBar = (props: TabBarProps) => {
+    const routes: Route[] = props.navigationState.routes;
     return (
       <View
         style={{
@@ -35,33 +45,52 @@ export const ScreenNavigator = () => {
           right: 0,
           bottom: 2,
         }}>
-        {props.navigationState.routes.map((route: Route, index: number) => {
+        {routes.map((route: Route, index: number) => {
+          const selectedColor = `${
+            selectedIndex === index ? '#2CC394' : 'gray'
+          }`;
           return (
-            <TouchableOpacity
-              accessibilityRole="button"
+            <View
               style={{
                 flex: 1,
+                flexDirection: 'row',
                 borderWidth: 0,
-                borderRightWidth: index === 0 ? 1 : 0,
+                borderRightWidth: 0,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onPress={() => {
-                setSelectedIndex(index);
-              }}
               key={route.key}>
-              <Icon
-                name={route.icon || ''}
-                color={`${selectedIndex === index ? '#2CC394' : 'gray'}`}
-                size={30}
-              />
-              <Animated.Text
+              <TouchableOpacity
+                accessibilityRole="button"
                 style={{
-                  color: `${selectedIndex === index ? '#2CC394' : 'gray'}`,
+                  flex: 1,
+                  borderWidth: 0,
+                  borderRightWidth: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => {
+                  setSelectedIndex(index);
                 }}>
-                {route.title}
-              </Animated.Text>
-            </TouchableOpacity>
+                <Icon name={route.icon || ''} color={selectedColor} size={30} />
+                <Animated.Text
+                  style={{
+                    color: selectedColor,
+                  }}>
+                  {route.title}
+                </Animated.Text>
+              </TouchableOpacity>
+              {/* separator */}
+              {index < routes.length - 1 ? (
+                <View
+                  style={{
+                    borderLeftWidth: 1,
+                    height: 40,
+                    borderLeftColor: 'gray',
+                  }}
+                />
+              ) : null}
+            </View>
           );
         })}
       </View>
