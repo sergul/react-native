@@ -6,15 +6,18 @@ import Animated from 'react-native-reanimated';
 import {Route} from 'react-native-tab-view';
 import {StopWatch} from './stop-watch/StopWatch';
 import {Timer} from './timer/Timer';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
 export const ScreenNavigator = () => {
-  const [index, setIndex] = useState(0);
-  const [position] = useState(() => new Animated.Value(0));
-  const [routes] = useState([
-    {key: 'stopWatch', title: 'Stop watch'},
-    {key: 'timer', title: 'Timer'},
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [position] = useState<Animated.Value<number>>(
+    () => new Animated.Value(0),
+  );
+  const [routes] = useState<Route[]>([
+    {key: 'stopWatch', title: 'Stop watch', icon: 'ios-stopwatch'},
+    {key: 'timer', title: 'Timer', icon: 'ios-timer'},
   ]);
 
   const renderScene = SceneMap({
@@ -30,7 +33,7 @@ export const ScreenNavigator = () => {
           position: 'absolute',
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: 2,
         }}>
         {props.navigationState.routes.map((route: Route, index: number) => {
           return (
@@ -38,17 +41,26 @@ export const ScreenNavigator = () => {
               accessibilityRole="button"
               style={{
                 flex: 1,
-                height: 30,
                 borderWidth: 0,
-                borderRightWidth: index === 0 ? 1: 0,
+                borderRightWidth: index === 0 ? 1 : 0,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
               onPress={() => {
-                setIndex(index);
+                setSelectedIndex(index);
               }}
               key={route.key}>
-              <Animated.Text>{route.title}</Animated.Text>
+              <Icon
+                name={route.icon || ''}
+                color={`${selectedIndex === index ? '#2CC394' : 'gray'}`}
+                size={30}
+              />
+              <Animated.Text
+                style={{
+                  color: `${selectedIndex === index ? '#2CC394' : 'gray'}`,
+                }}>
+                {route.title}
+              </Animated.Text>
             </TouchableOpacity>
           );
         })}
@@ -58,12 +70,12 @@ export const ScreenNavigator = () => {
 
   return (
     <TabView
-      navigationState={{index, routes}}
+      navigationState={{index: selectedIndex, routes}}
       renderScene={renderScene}
       tabBarPosition="bottom"
       renderTabBar={renderTabBar}
       position={position}
-      onIndexChange={setIndex}
+      onIndexChange={setSelectedIndex}
       initialLayout={initialLayout}
     />
   );
