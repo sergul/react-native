@@ -1,13 +1,8 @@
 import React, {ReactNode} from 'react';
-import {View} from 'react-native';
-import {StopWatch} from './src/ui/stop-watch/StopWatch';
+import {ScreenNavigator} from './src/ui/components/ScreenNavigator';
 
 const App: () => ReactNode = () => {
-  return (
-    <View>
-      <StopWatch />
-    </View>
-  );
+  return <ScreenNavigator />;
 };
 
 export default App;
