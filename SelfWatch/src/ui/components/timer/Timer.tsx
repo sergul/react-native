@@ -1,28 +1,12 @@
-import React, {useState, useCallback, useRef, useMemo} from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
+import React, {useState, useCallback, useRef, useMemo, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {useNavigation} from '@react-navigation/native';
+import {TimeProps, Time, Separator} from '../Timer.model';
+import {Button, Text} from 'react-native-elements';
 
-interface Time {
-  milliseconds: number;
-  seconds: number;
-  minutes: number;
-  hours: number;
-}
-
-enum Separators {
-  general = ':',
-  seconds = '.',
-}
-
-interface TimeProps {
-  value: string;
-  separator?: string;
-}
-
-const TimeText = (props: TimeProps) => {
+export const TimeText = (props: TimeProps) => {
   const {separator = ''} = props;
-  return <Text>{`${props.value}${separator}`}</Text>;
+  return <Text style={{fontSize: 50}}>{`${props.value}${separator}`}</Text>;
 };
 
 export const Timer = () => {
@@ -36,14 +20,20 @@ export const Timer = () => {
   const requestFrameID = useRef(0);
   const startTime = useRef(0);
   const pauseTime = useRef(0);
+
+  useEffect(() => {
+    return () => {
+      cancelAnimationFrame(requestFrameID.current);
+    };
+  }, []);
+
   const callback = useCallback((currentMilliseconds: number) => {
     const converted =
       Math.floor((currentMilliseconds - startTime.current) / 10) / 100;
     const seconds = Math.floor(converted);
-    const milliseconds = Math.floor((converted - seconds) * 100);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    setTime({milliseconds, minutes, seconds, hours});
+    setTime({minutes, seconds, hours});
     requestFrameID.current = requestAnimationFrame(callback);
   }, []);
 
@@ -67,24 +57,16 @@ export const Timer = () => {
   const hoursStr = prependZero(timePassed.hours % 24);
   const minutesStr = prependZero(timePassed.minutes % 60);
   const secondsStr = prependZero(timePassed.seconds % 60);
-  const millisecondsStr = prependZero(timePassed.milliseconds);
 
   return (
     <View style={{alignItems: 'center'}}>
-      <Text>Hi I'm Timer</Text>
-      <Button
-        title="Go to Jane's profile"
-        onPress={() => {
-        }}
-      />
       <View
         style={{
           flexDirection: 'row',
         }}>
-        <TimeText value={hoursStr} separator={Separators.general} />
-        <TimeText value={minutesStr} separator={Separators.general} />
-        <TimeText value={secondsStr} separator={Separators.seconds} />
-        <TimeText value={millisecondsStr} />
+        <TimeText value={hoursStr} separator={Separator.General} />
+        <TimeText value={minutesStr} separator={Separator.General} />
+        <TimeText value={secondsStr} />
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <Button

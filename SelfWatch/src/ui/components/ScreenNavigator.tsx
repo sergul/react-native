@@ -1,5 +1,11 @@
 import * as React from 'react';
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import {
   TabView,
   SceneMap,
@@ -62,6 +68,7 @@ export const ScreenNavigator = () => {
               key={route.key}>
               <TouchableOpacity
                 accessibilityRole="button"
+                activeOpacity={0.5}
                 style={{
                   flex: 1,
                   borderWidth: 0,
@@ -73,12 +80,12 @@ export const ScreenNavigator = () => {
                   setSelectedIndex(index);
                 }}>
                 <Icon name={route.icon || ''} color={selectedColor} size={30} />
-                <Animated.Text
+                <Text
                   style={{
                     color: selectedColor,
                   }}>
                   {route.title}
-                </Animated.Text>
+                </Text>
               </TouchableOpacity>
               {/* separator */}
               {index < routes.length - 1 ? (
@@ -106,6 +113,8 @@ export const ScreenNavigator = () => {
       position={position}
       onIndexChange={setSelectedIndex}
       initialLayout={initialLayout}
+      timingConfig={{duration: 150}}
+      springVelocityScale={3}
     />
   );
 };

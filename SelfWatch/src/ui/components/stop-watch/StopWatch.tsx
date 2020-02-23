@@ -1,28 +1,16 @@
-import React, {useState, useCallback, useRef, useMemo} from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Button} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-interface Time {
-  milliseconds: number;
-  seconds: number;
-  minutes: number;
-  hours: number;
-}
-
-enum Separators {
-  general = ':',
-  seconds = '.',
-}
-
-interface TimeProps {
-  value: string;
-  separator?: string;
-}
-
-const TimeText = (props: TimeProps) => {
-  const {separator = ''} = props;
-  return <Text>{`${props.value}${separator}`}</Text>;
-};
+import {Time, Separator, TimerState, Label} from '../Timer.model';
+import {TimeText} from '../timer/Timer';
 
 export const StopWatch = () => {
   const timeInitial = useMemo(
@@ -30,11 +18,18 @@ export const StopWatch = () => {
     [],
   );
   const [timePassed, setTime] = useState<Time>(timeInitial);
-  const [isStarted, toggleTimer] = useState<boolean>(false);
-  const [isReset, resetTimer] = useState<boolean>(false);
   const requestFrameID = useRef(0);
-  const startTime = useRef(0);
-  const pauseTime = useRef(0);
+  const startTime = useRef<number>(0);
+  const pauseTime = useRef<number>(0);
+
+  const [timerState, setTimerState] = useState(TimerState.Reset);
+
+  useEffect(() => {
+    return () => {
+      cancelAnimationFrame(requestFrameID.current);
+    };
+  }, []);
+
   const callback = useCallback((currentMilliseconds: number) => {
     // converts to seconds by cutting the last digit
     const secondsDecimal =
@@ -55,54 +50,92 @@ export const StopWatch = () => {
     requestFrameID.current = requestAnimationFrame(callback);
   }, []);
 
-  const onStartPause = () => {
-    if (!isStarted) {
-      if (startTime.current === 0) {
-        startTime.current = Date.now();
-      } else {
-        startTime.current += Date.now() - pauseTime.current;
-      }
+  useLayoutEffect(() => {
+    if (timerState === TimerState.Started) {
+      startTime.current = Date.now();
       requestAnimationFrame(callback);
-      resetTimer(false);
-    } else {
+    } else if (timerState === TimerState.Resumed) {
+      startTime.current += Date.now() - pauseTime.current;
+      requestAnimationFrame(callback);
+    } else if (timerState === TimerState.Paused) {
       pauseTime.current = Date.now();
       cancelAnimationFrame(requestFrameID.current);
+    } else if (timerState === TimerState.Reset) {
+      cancelAnimationFrame(requestFrameID.current);
+      setTime(timeInitial);
+      startTime.current = 0;
     }
-    toggleTimer(!isStarted);
+  }, [timerState]);
+
+  const onToggle = () => {
+    switch (timerState) {
+      case TimerState.Reset:
+        setTimerState(TimerState.Started);
+        break;
+      case TimerState.Started:
+      case TimerState.Resumed:
+        setTimerState(TimerState.Paused);
+        break;
+      case TimerState.Paused:
+        setTimerState(TimerState.Resumed);
+        break;
+      default:
+        setTimerState(TimerState.Reset);
+    }
+  };
+
+  const getToggleButtonLabel = () => {
+    switch (timerState) {
+      case TimerState.Reset:
+        return Label.Start;
+      case TimerState.Paused:
+        return Label.Resume;
+      case TimerState.Resumed:
+      case TimerState.Started:
+        return Label.Pause;
+      default:
+        return '';
+    }
   };
 
   const prependZero = (value: number) => `${value < 10 ? '0' : ''}${value}`;
   const hoursStr = prependZero(timePassed.hours % 24);
   const minutesStr = prependZero(timePassed.minutes % 60);
   const secondsStr = prependZero(timePassed.seconds % 60);
-  const millisecondsStr = prependZero(timePassed.milliseconds);
+  const millisecondsStr = prependZero(timePassed.milliseconds || 0);
 
   return (
-    <View style={{alignItems: 'center'}}>
-      <Text>Hi I'm Stop watch</Text>
+    <View
+      style={{
+        alignItems: 'center',
+        borderWidth: 1,
+        flex: 1,
+        justifyContent: 'space-around',
+      }}>
       <View
         style={{
           flexDirection: 'row',
         }}>
-        <TimeText value={hoursStr} separator={Separators.general} />
-        <TimeText value={minutesStr} separator={Separators.general} />
-        <TimeText value={secondsStr} separator={Separators.seconds} />
+        <TimeText value={hoursStr} separator={Separator.General} />
+        <TimeText value={minutesStr} separator={Separator.General} />
+        <TimeText value={secondsStr} separator={Separator.Seconds} />
         <TimeText value={millisecondsStr} />
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          width: '100%',
+        }}>
         <Button
-          title={isStarted ? 'Stop' : 'Start'}
-          onPress={onStartPause}></Button>
+          title={getToggleButtonLabel()}
+          buttonStyle={{width: 100, borderRadius: 4}}
+          onPress={onToggle}></Button>
         <Button
-          title="Reset"
+          title={Label.Reset}
+          buttonStyle={{width: 100, borderRadius: 4}}
           onPress={() => {
-            if (!isReset) {
-              cancelAnimationFrame(requestFrameID.current);
-              setTime(timeInitial);
-              startTime.current = 0;
-              toggleTimer(false);
-            }
-            resetTimer(true);
+            setTimerState(TimerState.Reset);
           }}></Button>
       </View>
     </View>
