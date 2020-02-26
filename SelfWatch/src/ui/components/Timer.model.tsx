@@ -1,8 +1,11 @@
+import {PixelRatio} from 'react-native';
+import {scale} from '../reusables/utils/scaleSize';
+
 export enum TimerState {
-  Started = "Started",
-  Paused = "Paused",
-  Resumed = "Resumed",
-  Reset = "Reset",
+  Started = 'Started',
+  Paused = 'Paused',
+  Resumed = 'Resumed',
+  Reset = 'Reset',
 }
 
 export interface Time {
@@ -15,17 +18,24 @@ export interface Time {
 export enum Separator {
   General = ':',
   Seconds = '.',
+  None = '',
 }
 
 export interface TimeProps {
+  fontSize: number;
+  separator: string;
   value: string;
-  separator?: string;
+  paddingTop: number;
 }
 
 export enum Label {
-  Start = "Start",
-  Pause = "Pause",
-  Resume = "Resume",
-  Reset = "Reset",
-  Cancel = "Cancel"
+  Start = 'Start',
+  Pause = 'Pause',
+  Resume = 'Resume',
+  Reset = 'Reset',
+  Cancel = 'Cancel',
 }
+
+export const timeFontSize = Math.ceil(
+  PixelRatio.roundToNearestPixel(scale(60)),
+);

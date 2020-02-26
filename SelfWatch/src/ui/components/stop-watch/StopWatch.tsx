@@ -9,8 +9,8 @@ import React, {
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Time, Separator, TimerState, Label} from '../Timer.model';
-import {TimeText} from '../timer/Timer';
+import {Time, Separator, TimerState, Label, timeFontSize} from '../Timer.model';
+import {TimeText} from '../../reusables/components/TimeText';
 
 export const StopWatch = () => {
   const timeInitial = useMemo(
@@ -115,11 +115,16 @@ export const StopWatch = () => {
       <View
         style={{
           flexDirection: 'row',
+          alignItems: 'flex-end',
         }}>
-        <TimeText value={hoursStr} separator={Separator.General} />
-        <TimeText value={minutesStr} separator={Separator.General} />
+        <TimeText value={hoursStr} />
+        <TimeText value={minutesStr} />
         <TimeText value={secondsStr} separator={Separator.Seconds} />
-        <TimeText value={millisecondsStr} />
+        <TimeText
+          value={millisecondsStr}
+          fontSize={timeFontSize * 0.75}
+          separator={Separator.None}
+        />
       </View>
       <View
         style={{

@@ -1,13 +1,9 @@
 import React, {useState, useCallback, useRef, useMemo, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {TimeProps, Time, Separator} from '../Timer.model';
+import {Time, Separator} from '../Timer.model';
 import {Button, Text} from 'react-native-elements';
-
-export const TimeText = (props: TimeProps) => {
-  const {separator = ''} = props;
-  return <Text style={{fontSize: 50}}>{`${props.value}${separator}`}</Text>;
-};
+import {TimeText} from '../../reusables/components/TimeText';
 
 export const Timer = () => {
   const timeInitial = useMemo(
@@ -64,9 +60,9 @@ export const Timer = () => {
         style={{
           flexDirection: 'row',
         }}>
-        <TimeText value={hoursStr} separator={Separator.General} />
-        <TimeText value={minutesStr} separator={Separator.General} />
-        <TimeText value={secondsStr} />
+        <TimeText value={hoursStr} />
+        <TimeText value={minutesStr} />
+        <TimeText value={secondsStr} separator={Separator.None} />
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <Button
