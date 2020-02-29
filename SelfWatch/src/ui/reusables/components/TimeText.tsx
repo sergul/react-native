@@ -3,7 +3,7 @@ import {Text} from 'react-native-elements';
 import React from 'react';
 
 export const TimeText = (props: TimeProps) => {
-  const {separator = '', fontSize, paddingTop} = props;
+  const {separator, fontSize, paddingTop} = props;
   return (
     <Text
       style={{

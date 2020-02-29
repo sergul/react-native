@@ -6,6 +6,7 @@ export enum TimerState {
   Paused = 'Paused',
   Resumed = 'Resumed',
   Reset = 'Reset',
+  Restarted = 'Restarted',
 }
 
 export interface Time {
@@ -34,6 +35,7 @@ export enum Label {
   Resume = 'Resume',
   Reset = 'Reset',
   Cancel = 'Cancel',
+  Restart = 'Restart',
 }
 
 export const timeFontSize = Math.ceil(

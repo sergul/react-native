@@ -17,7 +17,7 @@ export const StopWatch = () => {
     () => ({milliseconds: 0, seconds: 0, minutes: 0, hours: 0}),
     [],
   );
-  const [timePassed, setTime] = useState<Time>(timeInitial);
+  const [timeElapsed, setTime] = useState<Time>(timeInitial);
   const requestFrameID = useRef(0);
   const startTime = useRef<number>(0);
   const pauseTime = useRef<number>(0);
@@ -99,10 +99,10 @@ export const StopWatch = () => {
   };
 
   const prependZero = (value: number) => `${value < 10 ? '0' : ''}${value}`;
-  const hoursStr = prependZero(timePassed.hours % 24);
-  const minutesStr = prependZero(timePassed.minutes % 60);
-  const secondsStr = prependZero(timePassed.seconds % 60);
-  const millisecondsStr = prependZero(timePassed.milliseconds || 0);
+  const hoursStr = prependZero(timeElapsed.hours % 24);
+  const minutesStr = prependZero(timeElapsed.minutes % 60);
+  const secondsStr = prependZero(timeElapsed.seconds % 60);
+  const millisecondsStr = prependZero(timeElapsed.milliseconds || 0);
 
   return (
     <View
