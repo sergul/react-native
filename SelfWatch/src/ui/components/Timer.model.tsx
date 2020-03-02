@@ -1,5 +1,6 @@
 import {PixelRatio} from 'react-native';
 import {scale} from '../reusables/utils/scaleSize';
+import {Timer} from './timer/Timer';
 
 export enum TimerState {
   Started = 'Started',
@@ -38,6 +39,10 @@ export enum Label {
   Restart = 'Restart',
 }
 
-export const timeFontSize = Math.ceil(
-  PixelRatio.roundToNearestPixel(scale(60)),
-);
+export enum FontSize {
+  StopWatch = 60,
+  Timer = 70,
+}
+
+export const getScaledFontSize = (staticFontSize: number) =>
+  Math.ceil(PixelRatio.roundToNearestPixel(scale(staticFontSize)));

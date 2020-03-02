@@ -9,7 +9,14 @@ import React, {
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Time, Separator, TimerState, Label, timeFontSize} from '../Timer.model';
+import {
+  Time,
+  Separator,
+  TimerState,
+  Label,
+  getScaledFontSize,
+  FontSize,
+} from '../Timer.model';
 import {TimeText} from '../../reusables/components/TimeText';
 
 export const StopWatch = () => {
@@ -108,7 +115,7 @@ export const StopWatch = () => {
     <View
       style={{
         alignItems: 'center',
-        borderWidth: 1,
+        borderWidth: 0,
         flex: 1,
         justifyContent: 'space-around',
       }}>
@@ -122,7 +129,7 @@ export const StopWatch = () => {
         <TimeText value={secondsStr} separator={Separator.Seconds} />
         <TimeText
           value={millisecondsStr}
-          fontSize={timeFontSize * 0.75}
+          fontSize={getScaledFontSize(FontSize.StopWatch) * 0.75}
           separator={Separator.None}
         />
       </View>
@@ -137,6 +144,7 @@ export const StopWatch = () => {
           buttonStyle={{width: 100, borderRadius: 4}}
           onPress={onToggle}></Button>
         <Button
+          disabled={timerState === TimerState.Reset}
           title={Label.Reset}
           buttonStyle={{width: 100, borderRadius: 4}}
           onPress={() => {

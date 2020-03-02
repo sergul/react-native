@@ -9,11 +9,20 @@ import React, {
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Time, Separator, TimerState, Label} from '../Timer.model';
+import {
+  Time,
+  Separator,
+  TimerState,
+  Label,
+  getScaledFontSize,
+  FontSize,
+} from '../Timer.model';
 import {TimeText} from '../../reusables/components/TimeText';
 
+const fontSize = getScaledFontSize(FontSize.Timer);
+
 export const Timer = () => {
-  const timeSet = useMemo(() => ({seconds: 59, minutes: 45, hours: 1}), []);
+  const timeSet = useMemo(() => ({seconds: 59, minutes: 45, hours: 0}), []);
   const overallSeconds = useRef<number>(
     timeSet.seconds + timeSet.minutes * 60 + timeSet.hours * 60 * 60,
   );
@@ -93,7 +102,7 @@ export const Timer = () => {
     <View
       style={{
         alignItems: 'center',
-        borderWidth: 1,
+        borderWidth: 0,
         flex: 1,
         justifyContent: 'space-around',
       }}>
@@ -102,9 +111,13 @@ export const Timer = () => {
           flexDirection: 'row',
           alignItems: 'flex-end',
         }}>
-        <TimeText value={hoursStr} />
-        <TimeText value={minutesStr} />
-        <TimeText value={secondsStr} separator={Separator.None} />
+        <TimeText fontSize={fontSize} value={hoursStr} />
+        <TimeText fontSize={fontSize} value={minutesStr} />
+        <TimeText
+          fontSize={fontSize}
+          value={secondsStr}
+          separator={Separator.None}
+        />
       </View>
       <View
         style={{
@@ -118,6 +131,7 @@ export const Timer = () => {
           onPress={onToggle}></Button>
         <Button
           title={Label.Cancel}
+          disabled={timerState === TimerState.Reset}
           buttonStyle={{width: 100, borderRadius: 4}}
           onPress={() => {
             setTimerState(TimerState.Reset);

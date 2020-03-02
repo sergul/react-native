@@ -1,4 +1,9 @@
-import {TimeProps, timeFontSize, Separator} from '../../components/Timer.model';
+import {
+  TimeProps,
+  getScaledFontSize,
+  Separator,
+  FontSize,
+} from '../../components/Timer.model';
 import {Text} from 'react-native-elements';
 import React from 'react';
 
@@ -20,6 +25,6 @@ export const TimeText = (props: TimeProps) => {
 };
 
 TimeText.defaultProps = {
-  fontSize: timeFontSize,
+  fontSize: getScaledFontSize(FontSize.StopWatch),
   separator: Separator.General,
 } as Partial<TimeProps>;
