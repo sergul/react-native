@@ -26,7 +26,7 @@ type TabBarProps = SceneRendererProps & {
 const initialLayout = {width: Dimensions.get('window').width};
 
 export const ScreenNavigator = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(1);
   const [position] = useState<Animated.Value<number>>(
     () => new Animated.Value(0),
   );

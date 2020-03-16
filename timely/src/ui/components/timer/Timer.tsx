@@ -6,29 +6,25 @@ import React, {
   useEffect,
   useLayoutEffect,
 } from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Animated} from 'react-native';
 import {Button} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {
-  Time,
-  Separator,
-  TimerState,
-  Label,
-  getScaledFontSize,
-  FontSize,
-} from '../Timer.model';
+import {Time, Separator, TimerState, Label, FontSize} from '../Timer.model';
 import {TimeText} from '../../reusables/components/TimeText';
-
+import {getScaledFontSize} from '../../reusables/utils/scaleSize';
+import {Progress} from '../Progress';
+import MaskedView from '@react-native-community/masked-view';
 const fontSize = getScaledFontSize(FontSize.Timer);
 
 export const Timer = () => {
-  const timeSet = useMemo(() => ({seconds: 59, minutes: 45, hours: 0}), []);
+  const timeSet = useMemo(() => ({seconds: 59, minutes: 0, hours: 0}), []);
   const overallSeconds = useRef<number>(
     timeSet.seconds + timeSet.minutes * 60 + timeSet.hours * 60 * 60,
   );
   const [timeElapsed, setTime] = useState<Time>(timeSet);
   const requestFrameID = useRef(0);
   const startTime = useRef<number>(0);
+  const prevSeconds = useRef<number>(0);
 
   const [timerState, setTimerState] = useState(TimerState.Reset);
 
@@ -46,11 +42,16 @@ export const Timer = () => {
     if (seconds > 0) {
       requestFrameID.current = requestAnimationFrame(callback);
     }
-    setTime({
-      seconds,
-      minutes: Math.floor(seconds / 60),
-      hours: Math.floor(seconds / 60 / 60),
-    });
+    if (prevSeconds.current !== seconds) {
+      console.log(seconds);
+      setTime({
+        seconds,
+        minutes: Math.floor(seconds / 60),
+        hours: Math.floor(seconds / 60 / 60),
+      });
+    }
+    
+    prevSeconds.current = seconds;
   }, []);
 
   useLayoutEffect(() => {
@@ -104,9 +105,9 @@ export const Timer = () => {
         alignItems: 'center',
         borderWidth: 0,
         flex: 1,
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
       }}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           alignItems: 'flex-end',
@@ -118,6 +119,13 @@ export const Timer = () => {
           value={secondsStr}
           separator={Separator.None}
         />
+      </View> */}
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+        }}>
+        <Progress isStarted={timerState === TimerState.Started} hours={hoursStr} minutes={minutesStr} seconds={secondsStr}/>
       </View>
       <View
         style={{
